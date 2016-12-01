@@ -1,0 +1,85 @@
+<html>
+  <head>
+       <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8" />
+      <title>Windy Wind</title>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="charts.js"></script>
+    <script type="text/javascript" src="utilities.js"></script>
+           <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCODD0zuyc6EUM-Te7rcZgKJjW0pABs5NA&callback=initMap"
+    async defer></script>
+        
+      
+<link rel="stylesheet" type="text/css" href="style.css">   
+    
+  </head>
+    
+     <script>
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map_div'), {
+          zoom: 5,
+          center: {lat: 37.09024, lng: -95.712891},
+          mapTypeId: 'terrain'
+        });
+
+        var lineSymbol = {
+          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+        };
+
+        var line = new google.maps.Polyline({
+          path: [{lat: 42, lng: -76}, {lat: 43, lng: -75}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+          
+           var line2 = new google.maps.Polyline({
+          path: [ {lat: 41.8, lng: -75.8}, {lat: 42.8, lng: -74.8}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+          
+          
+           var line3 = new google.maps.Polyline({
+          path: [ {lat: 39, lng: -71.8}, {lat: 39.8, lng: -70.8}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+          
+              var line4 = new google.maps.Polyline({
+          path: [ {lat: 40.3, lng: -70.3}, {lat: 41, lng: -69}],
+          icons: [{
+            icon: lineSymbol,
+            offset: '100%'
+          }],
+          map: map
+        });
+          
+          
+      }
+    </script>
+ 
+    
+  <body>
+    
+      <h1 id="title">Wind Direction</h1>
+      
+    <!--Div that will hold the dashboard-->
+    <div id="dashboard_div">
+      <!--Divs that will hold each control and chart-->
+        <div id="map_div"></div>
+    </div>
+      
+      
+  </body>
+</html>
