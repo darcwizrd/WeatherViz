@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		
+		
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script type="text/javascript">
+		"use strict";
+			 google.charts.load('current', {packages: ['corechart']});
+			 google.charts.setOnLoadCallback(drawChart);		
+		
+		function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Date 2016', 'Recorded Precipitation', 'Average'],
+          ['11/20',  0.52, 1.93],
+          ['11/21',  0.22, 2.05],
+		  ['11/22',  0.01, 2.13],
+          ['11/23',  0.02, 2.22],
+          ['11/24',  0.16, 2.36],
+		  ['11/25',  0.03, 2.44],
+		  ['11/26',  0.08, 2.56]
+        ]);
+
+        var options = {
+          title: 'Precipitation of the Week of 11/20/2016',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+		  crosshair: { trigger: 'focus' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(data, options);
+		}
+		</script>
+		
+	</head>
+	<body>
+	<div id="curve_chart"></div>
+	</body>
+</html>
