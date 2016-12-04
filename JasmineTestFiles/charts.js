@@ -100,7 +100,7 @@ function drawDashboard(response) {
     
     
     var update = function(dataColumn, title){
-        mapView.setColumns([3,4,dataColumn]);
+        mapView.setColumns([3,4,1]);
         map.draw(mapView, mapOptions);
         //set the columns to be used for this chart/filter combo
 	    chartRangeFilter.setView({columns: [5, dataColumn]});
@@ -111,6 +111,17 @@ function drawDashboard(response) {
     }
     
     update(6, 'MLY-TMIN-NORMAL');
+    
+    google.visualization.events.addListener(map, 'select', function(){
+        var placeName = data.getValue(map.getSelection()[0].row-1, 1);
+        categoryFilter.setState({'selectedValues': [placeName] });
+        dashboard.draw(data);
+    });
+    
+    google.visualization.events.addListener(categoryFilter, 'statechange', function(){
+        var placeName = categoryFilter.getState().selectedValues[0];
+        console.log(placeName);
+    });
     
     document.getElementById('6').onclick = function(){
         update(6, this.value);
