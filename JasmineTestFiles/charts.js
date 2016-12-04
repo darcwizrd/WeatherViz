@@ -84,7 +84,7 @@ function drawDashboard(response) {
     //map
     var mapView = new google.visualization.DataView(data);
     
-    console.log(data.)
+    
     var map = new google.visualization.Map(document.getElementById('map_div'));
     var mapOptions = {
       mapType:'normal',
