@@ -1,5 +1,5 @@
 // Load the Visualization API and the controls package.
-google.charts.load('current', {'packages': ['corechart', 'table', 'controls']});
+google.charts.load('upcoming', {'packages': ['corechart', 'table', 'controls', 'map']});
 
 // Set a callback to run when the Google Visualization API is loaded.
 google.charts.setOnLoadCallback(dataQuery);
@@ -80,12 +80,28 @@ function drawDashboard(response) {
 		}
 	});
     
+    
+    //map
+    var mapView = new google.visualization.DataView(data);
+    
+    console.log(data.)
+    var map = new google.visualization.Map(document.getElementById('map_div'));
+    var mapOptions = {
+      mapType:'normal',
+      showTooltip: true,
+      showInfoWindow: true
+    };
+    
+    
     //bind filters to chart
 	dashboard.bind(categoryFilter, chart);
 	dashboard.bind(chartRangeFilter, chart);
+
     
     
     var update = function(dataColumn, title){
+        mapView.setColumns([3,4,dataColumn]);
+        map.draw(mapView, mapOptions);
         //set the columns to be used for this chart/filter combo
 	    chartRangeFilter.setView({columns: [5, dataColumn]});
         //change the title
