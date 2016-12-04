@@ -8,35 +8,128 @@
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<script type="text/javascript">
 		"use strict";
-			 google.charts.load('current', {packages: ['corechart']});
-			 google.charts.setOnLoadCallback(drawChart);		
+			 google.charts.load('current', {packages: ['corechart', 'table', 'controls', 'map']});
+			 google.charts.setOnLoadCallback(dataQuery);	
+
+		function dataQuery(){
+			var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1zXIAyAU20Gv3o6-iEvklz_Fjlh4voBENihcftgumsHo/gviz/tq?=');
+			query.setQuery("select * format F 'MM/yyyy', I '0'");
+			query.send(drawDashboard);
+		}
 		
-		function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Date 2016', 'Recorded Precipitation', 'Average'],
-          ['11/20',  0.52, 1.93],
-          ['11/21',  0.22, 2.05],
-		  ['11/22',  0.01, 2.13],
-          ['11/23',  0.02, 2.22],
-          ['11/24',  0.16, 2.36],
-		  ['11/25',  0.03, 2.44],
-		  ['11/26',  0.08, 2.56]
-        ]);
+		function drawDashboard(response) {
+		
+			var data = response.getDataTable();
+			
+			var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard'));
+			
+		   /* var data = google.visualization.arrayToDataTable([
+			  ['Date 2016', 'Recorded Precipitation', 'Average'],
+			  ['11/20',  0.52, 1.93],
+			  ['11/21',  0.22, 2.05],
+			  ['11/22',  0.01, 2.13],
+			  ['11/23',  0.02, 2.22],
+			  ['11/24',  0.16, 2.36],
+			  ['11/25',  0.03, 2.44],
+			  ['11/26',  0.08, 2.56]
+			]);*/
 
-        var options = {
-          title: 'Precipitation of the Week of 11/20/2016',
-          curveType: 'function',
-          legend: { position: 'bottom' },
-		  crosshair: { trigger: 'focus' }
-        };
+			/*var options = {
+			  title: 'Precipitation of the Week of 11/20/2016',
+			  curveType: 'function',
+			  legend: { position: 'bottom' },
+			  crosshair: { trigger: 'focus' }
+			};*/
 
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-        chart.draw(data, options);
+			var chart = new google.visualization.ChartWrapper({
+				'chartType': 'LineChart',
+				'containerId': 'chart_div',
+				'options': {
+					'backgroundColor': {'strokeWidth': 2},
+					'width': 550,
+					'height': 300,
+					'legend': 'right',
+					'vAxis':{
+						'title': 'Temperature(F)'
+					},
+					'hAxis':{
+						'title': 'Date(MM/yyyy)',
+						'slantedText': true,
+						'showTextEvery': 1,
+						gridlines: { count: 10 }
+					}
+					
+				}
+			
+			});
+			//chart.draw(data, options);
+			//Location Filter
+			var localeFilter = new google.visualization.ControlWrapper({
+				'controlType': 'CategoryFilter',
+				'containerId': 'localeFilter_div',
+				'options': {
+					'filterColumnLabel': 'STATION_NAME',
+				}
+			});
+			
+			//date slider
+			var dateRangeFilter = new google.visualization.ControlWrapper({
+				'controlType': 'ChartRangeFilter',
+				'containerId': 'dateRangeFilter_div',
+				'options': {
+					'filterColumnLabel': 'DATE',
+					'ui': {
+						chartOptions: {
+							'enableInteractivity': false,
+							'chartArea': {
+								'height': 50,
+								'width': 548
+							},
+							'hAxis': {
+								'textPosition': 'in'
+							},
+							'vAxis': {
+								'textPosition': 'none',
+								'gridlines': {
+									'color': 'none'
+								}
+							}
+						}
+					}
+				}
+			
+			});
+			
+			//bind filters to chart
+			dashboard.bind(localeFilter, chart);
+			dashboard.bind(dateRangeFilter, chart);
+			
+			var update = function(dataColumn, title){
+				dateRangeFilter.setView({columns: [5, dataColumn]});
+				chart.setOption('title', title);
+				dashboard.draw(data);
+			}
+			
+			update(6,'MLY-PRCP-NORMAL');
+			
+			document.getElementById('6').onclick = function(){
+				update(6, this.value);
+			};
+		
 		}
 		</script>
 		
 	</head>
 	<body>
-	<div id="curve_chart"></div>
+	<div id = 'map_div'></div>
+	<div id='table_div'></div>
+    <input type='button' id='6'  value='MLY-P-NORMAL'/>
+	
+	<div id="dashboard_div">
+		<!--Divs that will hold each control and chart-->
+		<div id="localeFilter_div"></div>
+		<div id="chart_div"></div>
+		<div id="dateRangeFilter_div"></div>
+	</div>
 	</body>
 </html>
