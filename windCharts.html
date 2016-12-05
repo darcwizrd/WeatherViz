@@ -5,9 +5,7 @@
       <title>Windy Wind</title>
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="charts.js"></script>
-    <script type="text/javascript" src="utilities.js"></script>
-           <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCODD0zuyc6EUM-Te7rcZgKJjW0pABs5NA&callback=initMap"
+           <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCODD0zuyc6EUM-Te7rcZgKJjW0pABs5NA"
     async defer></script>
         
       
@@ -16,57 +14,58 @@
   </head>
     
      <script>
+     google.charts.load('upcoming', {'packages':['corechart', 'controls', 'geomap']});
+    google.charts.setOnLoadCallback(getData);
+        
+        
+      function getData() {
 
-      function initMap() {
+          var dataQuery = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1sOBZMSB7ygfPTiYu3eWsFkmsjazKJOqBsKTeTw3GO9w/edit?');
+          dataQuery.send(handleQuery);
+          
+      }
+         
+        
+        function handleQuery(response){
+            var data = response.getDataTable();
+            
+            var latArray = data.getDistinctValues('B');
+            var lngArray = data.getDistinctValues('C');
+            var degreeArray = data.getDistinctValues('D');
+            
+            drawMap(latArray,lngArray,degreeArray);
+            
+        }
+         
+           function drawMap(latitude, longitude, degree) {
+               
+               console.log(latitude);
+               console.log(longitude);
+               
         var map = new google.maps.Map(document.getElementById('map_div'), {
           zoom: 5,
           center: {lat: 37.09024, lng: -95.712891},
           mapTypeId: 'terrain'
         });
 
-        var lineSymbol = {
-          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
-        };
+            var lineSymbol = {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+                };
+                 
+                 for(i = 0; i < latitude.length; i++){
+                    var marker = new google.maps.Marker({
+                        position: {lat: latitude[i], lng: longitude[i]},
+                        icon: {
+                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                        scale: 5,
+                        rotation: degree[i]
+                        },
+                        map: map
+                    }); 
+                 }
+             }
 
-        var line = new google.maps.Polyline({
-          path: [{lat: 42, lng: -76}, {lat: 43, lng: -75}],
-          icons: [{
-            icon: lineSymbol,
-            offset: '100%'
-          }],
-          map: map
-        });
-          
-           var line2 = new google.maps.Polyline({
-          path: [ {lat: 41.8, lng: -75.8}, {lat: 42.8, lng: -74.8}],
-          icons: [{
-            icon: lineSymbol,
-            offset: '100%'
-          }],
-          map: map
-        });
-          
-          
-           var line3 = new google.maps.Polyline({
-          path: [ {lat: 39, lng: -71.8}, {lat: 39.8, lng: -70.8}],
-          icons: [{
-            icon: lineSymbol,
-            offset: '100%'
-          }],
-          map: map
-        });
-          
-              var line4 = new google.maps.Polyline({
-          path: [ {lat: 40.3, lng: -70.3}, {lat: 41, lng: -69}],
-          icons: [{
-            icon: lineSymbol,
-            offset: '100%'
-          }],
-          map: map
-        });
-          
-          
-      }
+     
     </script>
  
     
