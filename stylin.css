@@ -1,0 +1,17 @@
+@font-face{ 
+	font-family: Pusab; src: url('PUSAB___.otf');
+}
+
+body{
+				width:800px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+html{ background-color: #56C3E5;}
+#menu li p{
+		display: inline;	
+		margin-left: 15px;
+		font-family: Pusab;
+		
+}
+
